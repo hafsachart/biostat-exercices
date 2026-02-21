@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercices Biostatistiques — Santé Publique 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf8;
+    --white: #ffffff;
+    --border: #e4e4dc;
+    --border2: #d0d0c4;
+    --text: #1a1a16;
+    --text-muted: #6b6b5e;
+    --text-dim: #9a9a8e;
+    --accent: #1d4ed8;
+    --accent-light: #eff6ff;
+    --accent-border: #bfdbfe;
+    --green: #15803d;
+    --green-light: #f0fdf4;
+    --green-border: #bbf7d0;
+    --orange: #c2410c;
+    --orange-light: #fff7ed;
+    --orange-border: #fed7aa;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --purple: #7c3aed;
+    --purple-light: #f5f3ff;
+    --teal: #0f766e;
+    --teal-light: #f0fdfa;
+    --teal-border: #99f6e4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* ─── HEADER ─── */
+  .site-header {
+    background: var(--text);
+    color: white;
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 30px,
+      rgba(255,255,255,0.015) 30px,
+      rgba(255,255,255,0.015) 60px
+    );
+  }
+
+  .header-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #93c5fd;
+    border: 1px solid rgba(147,197,253,0.3);
+    padding: 0.3rem 0.9rem;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    position: relative;
+  }
+
+  .site-header h1 {
+    font-family: 'Lora', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
+    position: relative;
+  }
+
+  .site-header .sub {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    position: relative;
+  }
+
+  /* ─── NAV ─── */
+  .toc {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .toc a {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .toc a:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent-border); }
+
+  /* ─── LAYOUT ─── */
+  .page { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+  /* ─── SECTION TITLE ─── */
+  .section-title {
+    margin: 3rem 0 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--text);
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .section-title .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: #f1f1ec;
+    padding: 0.15rem 0.6rem;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .section-title h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* ─── EXERCISE CARD ─── */
+  .exercise {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .exercise-header {
+    padding: 1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    background: #f8f8f5;
+  }
+
+  .ex-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .ex-badge.easy { background: var(--green-light); color: var(--green); border: 1px solid var(--green-border); }
+  .ex-badge.medium { background: var(--orange-light); color: var(--orange); border: 1px solid var(--orange-border); }
+  .ex-badge.hard { background: var(--red-light); color: var(--red); border: 1px solid #fecaca; }
+
+  .ex-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .exercise-body { padding: 1.4rem; }
+
+  /* ─── CONTEXT BOX ─── */
+  .context {
+    background: var(--accent-light);
+    border: 1px solid var(--accent-border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: #1e3a5f;
+  }
+
+  /* ─── QUESTIONS ─── */
+  .questions { margin-bottom: 1rem; }
+  .question-item {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.92rem;
+    color: var(--text);
+  }
+
+  .q-marker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+    background: var(--text);
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ─── TABLE ─── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 1rem 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .data-table th {
+    background: var(--text);
+    color: white;
+    padding: 0.6rem 0.9rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+  }
+
+  .data-table td {
+    padding: 0.55rem 0.9rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table td:last-child { border-right: none; }
+  .data-table tr:nth-child(even) td { background: #f8f8f5; }
+  .data-table td.row-header { font-weight: 600; background: #f1f1ec; color: var(--text-muted); text-align: left; }
+  .data-table td.total-cell { font-weight: 700; background: #ebebea; }
+
+  /* ─── CORRECTION ─── */
+  .correction-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--teal);
+    cursor: pointer;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--teal-border);
+    border-radius: 10px;
+    background: var(--teal-light);
+    width: 100%;
+    text-align: left;
+    transition: all 0.15s;
+    margin-top: 0.75rem;
+    user-select: none;
+  }
+
+  .correction-toggle:hover { background: #ccfbf1; }
+
+  .toggle-arrow {
+    margin-left: auto;
+    transition: transform 0.25s ease;
+    font-size: 0.9rem;
+  }
+
+  .correction-toggle.open .toggle-arrow { transform: rotate(180deg); }
+
+  .correction {
+    display: none;
+    padding: 1.25rem;
+    border: 1px solid var(--teal-border);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    background: var(--teal-light);
+    animation: fadeIn 0.25s ease;
+  }
+
+  .correction.show { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .corr-step {
+    margin-bottom: 1.2rem;
+  }
+
+  .corr-step:last-child { margin-bottom: 0; }
+
+  .step-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--teal);
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .corr-step p, .corr-step li {
+    font-size: 0.9rem;
+    color: #134e4a;
+    line-height: 1.75;
+  }
+
+  .formula-block {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88rem;
+    background: rgba(15,118,110,0.08);
+    border: 1px solid rgba(15,118,110,0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin: 0.6rem 0;
+    color: var(--teal);
+    line-height: 1.9;
+  }
+
+  .result-box {
+    background: var(--green-light);
+    border: 1px solid var(--green-border);
+    border-left: 3px solid var(--green);
+    border-radius: 0 8px 8px 0;
+    padding: 0.75rem 1rem;
+    margin: 0.6rem 0;
+    font-size: 0.9rem;
+    color: #14532d;
+    font-weight: 500;
+  }
+
+  .warn-box {
+    background: var(--orange-light);
+    border: 1px solid var(--orange-border);
+    border-left: 3px solid var(--orange);
+    border-radius: 0 8px 8px 0;
+    padding: 0.75rem 1rem;
+    margin: 0.6rem 0;
+    font-size: 0.88rem;
+    color: #7c2d12;
+  }
+
+  .corr-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.84rem;
+    margin: 0.75rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(15,118,110,0.2);
+  }
+
+  .corr-table th {
+    background: rgba(15,118,110,0.15);
+    color: var(--teal);
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.78rem;
+  }
+
+  .corr-table td {
+    padding: 0.45rem 0.75rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(15,118,110,0.1);
+    border-right: 1px solid rgba(15,118,110,0.1);
+    color: #134e4a;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+  }
+
+  .corr-table tr:last-child td { border-bottom: none; }
+  .corr-table td:last-child { border-right: none; }
+  .corr-table td.row-hdr { font-weight: 700; font-family: 'Inter', sans-serif; text-align: left; }
+  .corr-table td.hi { background: rgba(15,118,110,0.07); font-weight: 700; }
+
+  /* ─── THEORY RECAP ─── */
+  .theory-card {
+    background: var(--purple-light);
+    border: 1px solid #ddd6fe;
+    border-radius: 14px;
+    padding: 1.25rem 1.4rem;
+    margin: 2rem 0 1.5rem;
+  }
+
+  .theory-card h3 {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    color: var(--purple);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .theory-card p, .theory-card li {
+    font-size: 0.88rem;
+    color: #3b1d6e;
+    line-height: 1.75;
+  }
+
+  .theory-card ul { padding-left: 1.2rem; }
+  .theory-card li { margin-bottom: 0.25rem; }
+
+  .formula-purple {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    background: rgba(124,58,237,0.07);
+    border: 1px solid rgba(124,58,237,0.18);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    margin: 0.6rem 0;
+    color: var(--purple);
+    display: block;
+    line-height: 1.9;
+  }
+
+  /* ─── FOOTER ─── */
+  .page-footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-tag">⚕ Santé Publique 1 — 1ère Année Médecine</div>
+  <h1>Exercices d'Application — Biostatistiques</h1>
+  <p class="sub">Tests statistiques · Comparaison de proportions · Chi² · McNemar</p>
+</header>
+
+<nav class="toc">
+  <a href="#ch4">Ch.4 — Fluctuation</a>
+  <a href="#ch5">Ch.5 — Estimation</a>
+  <a href="#ch6a">Ch.6a — Test 1 proportion</a>
+  <a href="#ch6b">Ch.6b — Test 2 proportions</a>
+  <a href="#ch7">Ch.7 — Chi² indépendance</a>
+  <a href="#ch8">Ch.8 — McNemar</a>
+</nav>
+
+<main class="page">
+
+<!-- ===== CHAPITRE 4 ===== -->
+<div id="ch4">
+  <div class="section-title">
+    <span class="num">Ch. 4</span>
+    <h2>Intervalles de Fluctuation</h2>
+  </div>
+
+  <div class="theory-card">
+    <h3>📐 Rappel théorique</h3>
+    <p>L'IF indique dans quel intervalle se situe la valeur observée avec probabilité (1-α), en partant de la valeur vraie.</p>
+    <span class="formula-purple">
+      IF proportion : [ π ± u_α × √(π(1-π)/n) ]  — si nπ ≥ 5 et n(1-π) ≥ 5<br>
+      IF moyenne : [ μ ± u_α × σ/√n ]  — si n ≥ 30<br>
+      u_α = 1,96 (95%)  |  u_α = 2,58 (99%)
+    </span>
+  </div>
+
+  <!-- EX 1 -->
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="ex-badge easy">Facile</span>
+      <span class="ex-title">Exercice 1 — Prévalence du tabagisme</span>
+    </div>
+    <div class="exercise-body">
+      <div class="context">
+        Dans une population, la prévalence du tabagisme est connue : π = 0,30. Un médecin interroge un échantillon de n = 100 patients.
+      </div>
+      <div class="questions">
+        <div class="question-item"><span class="q-marker">1</span><span>Vérifiez les conditions d'application de l'approximation normale.</span></div>
+        <div class="question-item"><span class="q-marker">2</span><span>Calculez l'intervalle de fluctuation à 95% de la proportion observée P.</span></div>
+        <div class="question-item"><span class="q-marker">3</span><span>Si le médecin trouve p = 0,22 dans son échantillon, cet échantillon est-il représentatif ?</span></div>
+      </div>
+      <button class="correction-toggle" onclick="toggleCorr(this)">
+        ✅ Afficher la correction <span class="toggle-arrow">▼</span>
+      </button>
+      <div class="correction">
+        <div class="corr-step">
+          <div class="step-label">📋 Question 1 — Conditions</div>
+          <div class="formula-block">
+            nπ = 100 × 0,30 = 30 ≥ 5 ✓<br>
+            n(1-π) = 100 × 0,70 = 70 ≥ 5 ✓
+          </div>
+          <div class="result-box">Les deux conditions sont vérifiées → on peut utiliser l'approximation normale.</div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📐 Question 2 — IF à 95%</div>
+          <div class="formula-block">
+            IF = [ π ± 1,96 × √(π(1-π)/n) ]<br>
+            = [ 0,30 ± 1,96 × √(0,30 × 0,70 / 100) ]<br>
+            = [ 0,30 ± 1,96 × √(0,0021) ]<br>
+            = [ 0,30 ± 1,96 × 0,0458 ]<br>
+            = [ 0,30 ± 0,0898 ]<br>
+            = [ 0,210 ; 0,390 ]
+          </div>
+          <div class="result-box">IF à 95% = [0,210 ; 0,390]</div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">🔍 Question 3 — Représentativité</div>
+          <p>p = 0,22 est-il dans l'IF [0,210 ; 0,390] ?</p>
+          <div class="formula-block">0,210 ≤ 0,22 ≤ 0,390 → OUI ✓</div>
+          <div class="result-box">✅ p = 0,22 appartient à l'IF à 95%. L'échantillon peut être considéré comme représentatif de la population.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EX 2 -->
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="ex-badge medium">Moyen</span>
+      <span class="ex-title">Exercice 2 — Poids de naissance</span>
+    </div>
+    <div class="exercise-body">
+      <div class="context">
+        Le poids de naissance dans une maternité suit une loi normale de moyenne μ = 3 200 g et d'écart-type σ = 400 g. On tire un échantillon de n = 64 nouveau-nés.
+      </div>
+      <div class="questions">
+        <div class="question-item"><span class="q-marker">1</span><span>Calculez l'IF à 95% et à 99% de la moyenne observée.</span></div>
+        <div class="question-item"><span class="q-marker">2</span><span>Un pédiatre observe m = 3 050 g dans son service. Son service est-il différent de la maternité de référence ?</span></div>
+        <div class="question-item"><span class="q-marker">3</span><span>Que se passerait-il si on avait n = 16 au lieu de n = 64 (même μ et σ) ?</span></div>
+      </div>
+      <button class="correction-toggle" onclick="toggleCorr(this)">
+        ✅ Afficher la correction <span class="toggle-arrow">▼</span>
+      </button>
+      <div class="correction">
+        <div class="corr-step">
+          <div class="step-label">📐 Question 1 — IF à 95% et 99%</div>
+          <div class="formula-block">
+            IF 95% = [ μ ± 1,96 × σ/√n ] = [ 3200 ± 1,96 × 400/√64 ]<br>
+            = [ 3200 ± 1,96 × 50 ] = [ 3200 ± 98 ] = <strong>[ 3 102 ; 3 298 ]</strong><br><br>
+            IF 99% = [ μ ± 2,58 × σ/√n ] = [ 3200 ± 2,58 × 50 ]<br>
+            = [ 3200 ± 129 ] = <strong>[ 3 071 ; 3 329 ]</strong>
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">🔍 Question 2 — Représentativité</div>
+          <div class="formula-block">
+            m = 3 050 g<br>
+            IF 95% : 3 102 ≤ 3 050 ? → NON ✗ (3050 &lt; 3102)<br>
+            IF 99% : 3 071 ≤ 3 050 ? → NON ✗ (3050 &lt; 3071)
+          </div>
+          <div class="result-box">❌ m = 3 050 g n'appartient ni à l'IF à 95%, ni à l'IF à 99%. Le service du pédiatre semble différent de la maternité de référence avec un risque &lt; 1%.</div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">💡 Question 3 — Effet de n</div>
+          <div class="formula-block">
+            Si n = 16 : σ/√n = 400/4 = 100 g<br>
+            IF 95% = [ 3200 ± 1,96 × 100 ] = [ 3004 ; 3396 ]
+          </div>
+          <div class="result-box">L'IF est plus large avec n = 16 qu'avec n = 64 (±196 vs ±98). Réduire la taille de l'échantillon diminue la précision. m = 3050 serait maintenant dans l'IF à 95%.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPITRE 5 ===== -->
+<div id="ch5">
+  <div class="section-title">
+    <span class="num">Ch. 5</span>
+    <h2>Estimation — Intervalles de Confiance</h2>
+  </div>
+
+  <div class="theory-card">
+    <h3>📐 Rappel théorique</h3>
+    <ul>
+      <li>IC proportion (grand n) : <strong>[ p ± u_α × √(p(1-p)/n) ]</strong> — si np ≥ 5 et n(1-p) ≥ 5</li>
+      <li>IC moyenne (n ≥ 30) : <strong>[ m ± u_α × √(s²/n) ]</strong></li>
+      <li>IC moyenne (n &lt; 30, X normale) : <strong>[ m ± t(n-1, α) × √(s²/n) ]</strong></li>
+      <li>Différence clé : IF part de la valeur vraie → IC part de la valeur observée</li>
+    </ul>
+  </div>
+
+  <!-- EX 3 -->
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="ex-badge easy">Facile</span>
+      <span class="ex-title">Exercice 3 — Dépistage du diabète</span>
+    </div>
+    <div class="exercise-body">
+      <div class="context">
+        Dans un dépistage, sur n = 400 personnes examinées, k = 48 sont diagnostiquées diabétiques.
+      </div>
+      <div class="questions">
+        <div class="question-item"><span class="q-marker">1</span><span>Donnez l'estimation ponctuelle de la prévalence du diabète.</span></div>
+        <div class="question-item"><span class="q-marker">2</span><span>Vérifiez les conditions d'application a priori.</span></div>
+        <div class="question-item"><span class="q-marker">3</span><span>Calculez l'IC à 95% puis à 99%.</span></div>
+        <div class="question-item"><span class="q-marker">4</span><span>Vérifiez les conditions a posteriori pour l'IC à 95%.</span></div>
+      </div>
+      <button class="correction-toggle" onclick="toggleCorr(this)">
+        ✅ Afficher la correction <span class="toggle-arrow">▼</span>
+      </button>
+      <div class="correction">
+        <div class="corr-step">
+          <div class="step-label">📌 Question 1 — Estimation ponctuelle</div>
+          <div class="formula-block">p = k/n = 48/400 = 0,12</div>
+          <div class="result-box">La prévalence estimée du diabète est p = 0,12 soit 12%.</div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">✅ Question 2 — Conditions a priori</div>
+          <div class="formula-block">
+            np = 400 × 0,12 = 48 ≥ 5 ✓<br>
+            n(1-p) = 400 × 0,88 = 352 ≥ 5 ✓
+          </div>
+          <div class="result-box">Conditions vérifiées → approximation normale valide.</div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📐 Question 3 — IC à 95% et 99%</div>
+          <div class="formula-block">
+            IC 95% = [ 0,12 ± 1,96 × √(0,12 × 0,88/400) ]<br>
+            = [ 0,12 ± 1,96 × √(0,000264) ]<br>
+            = [ 0,12 ± 1,96 × 0,01625 ]<br>
+            = [ 0,12 ± 0,0318 ]<br>
+            = <strong>[ 0,088 ; 0,152 ]</strong><br><br>
+            IC 99% = [ 0,12 ± 2,58 × 0,01625 ]<br>
+            = [ 0,12 ± 0,0419 ]<br>
+            = <strong>[ 0,078 ; 0,162 ]</strong>
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">🔍 Question 4 — Conditions a posteriori (IC 95%)</div>
+          <div class="formula-block">
+            n × bi = 400 × 0,088 = 35,2 ≥ 5 ✓<br>
+            n × (1-bi) = 400 × 0,912 = 364,8 ≥ 5 ✓<br>
+            n × bs = 400 × 0,152 = 60,8 ≥ 5 ✓<br>
+            n × (1-bs) = 400 × 0,848 = 339,2 ≥ 5 ✓
+          </div>
+          <div class="result-box">Les 4 conditions a posteriori sont vérifiées → l'IC est valide. La prévalence vraie du diabète est comprise entre 8,8% et 15,2% avec 95% de confiance.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EX 4 -->
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="ex-badge medium">Moyen</span>
+      <span class="ex-title">Exercice 4 — Glycémie et loi de Student</span>
+    </div>
+    <div class="exercise-body">
+      <div class="context">
+        La glycémie à jeun (en g/L) a été mesurée sur n = 10 patients. On suppose que la glycémie suit une loi normale dans la population. Les données sont : m = 0,95 g/L, s² = 0,04 g²/L². La valeur de t(9, 2,5%) = 2,262.
+      </div>
+      <div class="questions">
+        <div class="question-item"><span class="q-marker">1</span><span>Justifiez le choix de la loi de Student.</span></div>
+        <div class="question-item"><span class="q-marker">2</span><span>Calculez l'IC à 95% de la glycémie vraie μ.</span></div>
+        <div class="question-item"><span class="q-marker">3</span><span>La valeur normale de glycémie est μ₀ = 1,0 g/L. Cet échantillon est-il compatible avec cette norme ?</span></div>
+      </div>
+      <button class="correction-toggle" onclick="toggleCorr(this)">
+        ✅ Afficher la correction <span class="toggle-arrow">▼</span>
+      </button>
+      <div class="correction">
+        <div class="corr-step">
+          <div class="step-label">📋 Question 1 — Justification Student</div>
+          <p>n = 10 &lt; 30 → petit échantillon. On ne peut pas utiliser la loi normale pour approximer la distribution de m. Comme X est supposée normale dans la population, la statistique (m - μ)/√(s²/n) suit une loi de Student à (n-1) = 9 degrés de liberté.</p>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📐 Question 2 — IC à 95%</div>
+          <div class="formula-block">
+            IC 95% = [ m ± t(9, 2,5%) × √(s²/n) ]<br>
+            = [ 0,95 ± 2,262 × √(0,04/10) ]<br>
+            = [ 0,95 ± 2,262 × √(0,004) ]<br>
+            = [ 0,95 ± 2,262 × 0,0632 ]<br>
+            = [ 0,95 ± 0,143 ]<br>
+            = <strong>[ 0,807 ; 1,093 ]</strong>
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">🔍 Question 3 — Compatibilité avec la norme</div>
+          <div class="formula-block">μ₀ = 1,0 g/L   →   0,807 ≤ 1,0 ≤ 1,093 ? OUI ✓</div>
+          <div class="result-box">μ₀ = 1,0 g/L est contenu dans l'IC à 95%. L'échantillon est compatible avec la norme de glycémie. On ne peut pas conclure à une différence significative.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPITRE 6a ===== -->
+<div id="ch6a">
+  <div class="section-title">
+    <span class="num">Ch. 6a</span>
+    <h2>Test de comparaison d'une fréquence à une valeur théorique</h2>
+  </div>
+
+  <div class="theory-card">
+    <h3>📐 Rappel — Démarche du test</h3>
+    <ul>
+      <li><strong>H₀ :</strong> π = π₀ | <strong>H₁ :</strong> π ≠ π₀ (bilatéral) ou π &gt; π₀ ou π &lt; π₀</li>
+      <li><strong>Condition :</strong> nπ₀ ≥ 5 ET n(1-π₀) ≥ 5</li>
+    </ul>
+    <span class="formula-purple">
+      Statistique de test : u = (p - π₀) / √(π₀(1-π₀)/n)<br>
+      Région critique bilatérale : |u| &gt; u_α  (ex: 1,96 pour α=5%)<br>
+      Unilatéral droite : u &gt; u_{2α} | Unilatéral gauche : u &lt; -u_{2α}
+    </span>
+  </div>
+
+  <!-- EX 5 -->
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="ex-badge easy">Facile</span>
+      <span class="ex-title">Exercice 5 — Campagne anti-tabac</span>
+    </div>
+    <div class="exercise-body">
+      <div class="context">
+        Avant une campagne anti-tabac, la prévalence du tabagisme dans une ville était de π₀ = 0,40. Après la campagne, on interroge n = 200 personnes et on trouve que p = 72/200 = 0,36 fument. On veut savoir si la campagne a eu un effet (réduction).
+      </div>
+      <div class="questions">
+        <div class="question-item"><span class="q-marker">1</span><span>Posez H₀ et H₁ en justifiant le choix bilatéral ou unilatéral.</span></div>
+        <div class="question-item"><span class="q-marker">2</span><span>Vérifiez les conditions de validité.</span></div>
+        <div class="question-item"><span class="q-marker">3</span><span>Calculez la statistique de test u et concluez (α = 5%).</span></div>
+      </div>
+      <button class="correction-toggle" onclick="toggleCorr(this)">
+        ✅ Afficher la correction <span class="toggle-arrow">▼</span>
+      </button>
+      <div class="correction">
+        <div class="corr-step">
+          <div class="step-label">📋 Question 1 — Hypothèses</div>
+          <p>On cherche à savoir si la campagne a <em>réduit</em> le tabagisme → on s'attend à π &lt; π₀ = 0,40. Test <strong>unilatéral à gauche</strong>.</p>
+          <div class="formula-block">
+            H₀ : π = 0,40<br>
+            H₁ : π &lt; 0,40<br>
+            Région critique : u &lt; -u_{2α} = -1,645 (α = 5%)
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">✅ Question 2 — Conditions</div>
+          <div class="formula-block">
+            nπ₀ = 200 × 0,40 = 80 ≥ 5 ✓<br>
+            n(1-π₀) = 200 × 0,60 = 120 ≥ 5 ✓
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📐 Question 3 — Test et conclusion</div>
+          <div class="formula-block">
+            p = 72/200 = 0,36<br>
+            u = (p - π₀) / √(π₀(1-π₀)/n)<br>
+            u = (0,36 - 0,40) / √(0,40 × 0,60 / 200)<br>
+            u = -0,04 / √(0,0012)<br>
+            u = -0,04 / 0,03464<br>
+            u = <strong>-1,155</strong>
+          </div>
+          <div class="formula-block">
+            Région critique : u &lt; -1,645<br>
+            Valeur calculée : u = -1,155<br>
+            -1,155 &gt; -1,645 → u n'est PAS dans la région critique
+          </div>
+          <div class="result-box">❌ On ne rejette pas H₀. On ne peut pas conclure à une réduction significative du tabagisme après la campagne (au risque α = 5%). La baisse observée (40% → 36%) pourrait être due au hasard.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EX 6 VIH Abidjan -->
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="ex-badge medium">Moyen</span>
+      <span class="ex-title">Exercice 6 — VIH à Abidjan (exemple du cours)</span>
+    </div>
+    <div class="exercise-body">
+      <div class="context">
+        Une campagne de prévention du VIH à Abidjan vise à réduire la prévalence chez les femmes enceintes de 18–25 ans à un taux inférieur à π₀ = 0,10. Sur n = 147 femmes, 10 sont séropositives. On veut tester si l'objectif est atteint (α = 5%).
+      </div>
+      <div class="questions">
+        <div class="question-item"><span class="q-marker">1</span><span>Posez les hypothèses H₀ et H₁.</span></div>
+        <div class="question-item"><span class="q-marker">2</span><span>Calculez p et vérifiez les conditions de validité.</span></div>
+        <div class="question-item"><span class="q-marker">3</span><span>Calculez u et concluez.</span></div>
+      </div>
+      <button class="correction-toggle" onclick="toggleCorr(this)">
+        ✅ Afficher la correction <span class="toggle-arrow">▼</span>
+      </button>
+      <div class="correction">
+        <div class="corr-step">
+          <div class="step-label">📋 Question 1 — Hypothèses</div>
+          <p>L'objectif est de vérifier si la prévalence est <em>inférieure</em> à π₀ = 0,10 → test unilatéral à gauche.</p>
+          <div class="formula-block">
+            H₀ : π = 0,10<br>
+            H₁ : π &lt; 0,10<br>
+            Région critique : u &lt; -u_{2α} = -1,645
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📊 Question 2 — p et conditions</div>
+          <div class="formula-block">
+            p = 10/147 = 0,068<br>
+            nπ₀ = 147 × 0,10 = 14,7 ≥ 5 ✓<br>
+            n(1-π₀) = 147 × 0,90 = 132,3 ≥ 5 ✓
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📐 Question 3 — Statistique et conclusion</div>
+          <div class="formula-block">
+            u = (p - π₀) / √(π₀(1-π₀)/n)<br>
+            u = (0,068 - 0,10) / √(0,10 × 0,90 / 147)<br>
+            u = -0,032 / √(0,000612)<br>
+            u = -0,032 / 0,02474<br>
+            u = <strong>-1,293</strong>
+          </div>
+          <div class="formula-block">
+            u = -1,293 > -1,645 → pas dans la région critique
+          </div>
+          <div class="result-box">On ne rejette pas H₀. On ne peut pas affirmer que l'objectif de prévalence &lt; 10% est atteint au risque 5%. La différence observée (6,8% vs 10%) n'est pas statistiquement significative avec cet échantillon.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPITRE 6b ===== -->
+<div id="ch6b">
+  <div class="section-title">
+    <span class="num">Ch. 6b</span>
+    <h2>Test de comparaison de deux fréquences (échantillons indépendants)</h2>
+  </div>
+
+  <div class="theory-card">
+    <h3>📐 Rappel</h3>
+    <ul>
+      <li><strong>H₀ :</strong> π₁ = π₂ | <strong>H₁ :</strong> π₁ ≠ π₂ (ou &gt; ou &lt;)</li>
+      <li><strong>p_c :</strong> proportion poolée = (k₁ + k₂)/(n₁ + n₂)</li>
+    </ul>
+    <span class="formula-purple">
+      u = (p₁ - p₂) / √[ p_c(1-p_c) × (1/n₁ + 1/n₂) ]<br>
+      Conditions : n₁p_c ≥ 5, n₁(1-p_c) ≥ 5, n₂p_c ≥ 5, n₂(1-p_c) ≥ 5
+    </span>
+  </div>
+
+  <!-- EX 7 -->
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="ex-badge medium">Moyen</span>
+      <span class="ex-title">Exercice 7 — Efficacité d'un vaccin</span>
+    </div>
+    <div class="exercise-body">
+      <div class="context">
+        Un essai clinique évalue un nouveau vaccin. Dans le groupe vacciné (n₁ = 250), 18 personnes contractent la maladie. Dans le groupe placebo (n₂ = 250), 35 personnes contractent la maladie. On veut tester si le vaccin est efficace (α = 5%).
+      </div>
+      <div class="questions">
+        <div class="question-item"><span class="q-marker">1</span><span>Calculez p₁, p₂ et la proportion poolée p_c.</span></div>
+        <div class="question-item"><span class="q-marker">2</span><span>Posez H₀ et H₁, précisez la région critique.</span></div>
+        <div class="question-item"><span class="q-marker">3</span><span>Vérifiez les conditions, calculez u et concluez.</span></div>
+      </div>
+      <button class="correction-toggle" onclick="toggleCorr(this)">
+        ✅ Afficher la correction <span class="toggle-arrow">▼</span>
+      </button>
+      <div class="correction">
+        <div class="corr-step">
+          <div class="step-label">📊 Question 1 — Proportions</div>
+          <div class="formula-block">
+            p₁ = 18/250 = 0,072  (groupe vacciné)<br>
+            p₂ = 35/250 = 0,140  (groupe placebo)<br>
+            p_c = (18 + 35)/(250 + 250) = 53/500 = 0,106
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📋 Question 2 — Hypothèses</div>
+          <p>On cherche si le vaccin réduit la proportion de malades → π₁ &lt; π₂ → test unilatéral à gauche.</p>
+          <div class="formula-block">
+            H₀ : π₁ = π₂<br>
+            H₁ : π₁ &lt; π₂<br>
+            Région critique : u &lt; -u_{2α} = -1,645
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📐 Question 3 — Conditions, statistique, conclusion</div>
+          <div class="formula-block">
+            Conditions : n₁p_c = 250 × 0,106 = 26,5 ≥ 5 ✓<br>
+            n₁(1-p_c) = 250 × 0,894 = 223,5 ≥ 5 ✓  (idem pour n₂)<br><br>
+            u = (p₁ - p₂) / √[ p_c(1-p_c)(1/n₁ + 1/n₂) ]<br>
+            u = (0,072 - 0,140) / √[ 0,106 × 0,894 × (1/250 + 1/250) ]<br>
+            u = -0,068 / √[ 0,09476 × 0,008 ]<br>
+            u = -0,068 / √(0,000758)<br>
+            u = -0,068 / 0,02754<br>
+            u = <strong>-2,469</strong>
+          </div>
+          <div class="formula-block">u = -2,469 &lt; -1,645 → dans la région critique ✓</div>
+          <div class="result-box">✅ On rejette H₀ au risque 5%. Le vaccin réduit significativement la proportion de malades. Le taux d'infection dans le groupe vacciné (7,2%) est significativement inférieur à celui du groupe placebo (14%).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPITRE 7 ===== -->
+<div id="ch7">
+  <div class="section-title">
+    <span class="num">Ch. 7</span>
+    <h2>Test du Chi² d'indépendance</h2>
+  </div>
+
+  <div class="theory-card">
+    <h3>📐 Rappel</h3>
+    <ul>
+      <li><strong>H₀ :</strong> X₁ et X₂ sont indépendantes | <strong>H₁ :</strong> X₁ et X₂ sont liées</li>
+      <li><strong>Effectif théorique :</strong> t_ij = (total ligne i × total colonne j) / n_total</li>
+      <li><strong>Condition :</strong> tous les t_ij ≥ 5</li>
+      <li><strong>Degrés de liberté :</strong> ν = (L-1)(C-1)</li>
+    </ul>
+    <span class="formula-purple">
+      χ² = Σ (o_ij - t_ij)² / t_ij<br>
+      Région critique : χ² &gt; χ²(α, ν)  — toujours unilatéral à droite<br>
+      Tableau 2×2 : χ²(5%, 1 d.d.l.) = 3,84
+    </span>
+  </div>
+
+  <!-- EX 8 -->
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="ex-badge medium">Moyen</span>
+      <span class="ex-title">Exercice 8 — Hypertension et sexe</span>
+    </div>
+    <div class="exercise-body">
+      <div class="context">
+        Une étude examine le lien entre le sexe et l'hypertension artérielle. Les données observées sont :
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th></th><th>Hypertendu</th><th>Non hypertendu</th><th>Total</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-header">Homme</td><td>45</td><td>105</td><td class="total-cell">150</td></tr>
+          <tr><td class="row-header">Femme</td><td>30</td><td>120</td><td class="total-cell">150</td></tr>
+          <tr><td class="row-header total-cell">Total</td><td class="total-cell">75</td><td class="total-cell">225</td><td class="total-cell">300</td></tr>
+        </tbody>
+      </table>
+      <div class="questions" style="margin-top:1rem">
+        <div class="question-item"><span class="q-marker">1</span><span>Posez les hypothèses et précisez la région critique (α = 5%, tableau 2×2).</span></div>
+        <div class="question-item"><span class="q-marker">2</span><span>Calculez les effectifs théoriques et vérifiez la condition de validité.</span></div>
+        <div class="question-item"><span class="q-marker">3</span><span>Calculez χ² et concluez.</span></div>
+      </div>
+      <button class="correction-toggle" onclick="toggleCorr(this)">
+        ✅ Afficher la correction <span class="toggle-arrow">▼</span>
+      </button>
+      <div class="correction">
+        <div class="corr-step">
+          <div class="step-label">📋 Question 1 — Hypothèses</div>
+          <div class="formula-block">
+            H₀ : Le sexe et l'hypertension sont indépendants<br>
+            H₁ : Le sexe et l'hypertension sont liés<br>
+            ν = (2-1)(2-1) = 1 d.d.l.<br>
+            Région critique : χ² &gt; 3,84
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📊 Question 2 — Effectifs théoriques</div>
+          <div class="formula-block">
+            t_11 = (150 × 75)/300 = 37,5  ✓ (≥5)<br>
+            t_12 = (150 × 225)/300 = 112,5  ✓<br>
+            t_21 = (150 × 75)/300 = 37,5  ✓<br>
+            t_22 = (150 × 225)/300 = 112,5  ✓
+          </div>
+          <table class="corr-table">
+            <thead><tr><th></th><th>Hypertendu</th><th>Non hypertendu</th></tr></thead>
+            <tbody>
+              <tr><td class="row-hdr">Homme</td><td>37,5</td><td>112,5</td></tr>
+              <tr><td class="row-hdr">Femme</td><td>37,5</td><td>112,5</td></tr>
+            </tbody>
+          </table>
+          <div class="result-box">Tous les effectifs théoriques ≥ 5 ✓ → condition de validité respectée.</div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📐 Question 3 — Chi² et conclusion</div>
+          <div class="formula-block">
+            χ² = (45-37,5)²/37,5 + (105-112,5)²/112,5 + (30-37,5)²/37,5 + (120-112,5)²/112,5<br>
+            χ² = (7,5)²/37,5 + (-7,5)²/112,5 + (-7,5)²/37,5 + (7,5)²/112,5<br>
+            χ² = 56,25/37,5 + 56,25/112,5 + 56,25/37,5 + 56,25/112,5<br>
+            χ² = 1,500 + 0,500 + 1,500 + 0,500<br>
+            χ² = <strong>4,000</strong>
+          </div>
+          <div class="formula-block">χ² = 4,000 &gt; 3,84 → dans la région critique ✓</div>
+          <div class="result-box">✅ On rejette H₀ au risque 5%. Il existe un lien significatif entre le sexe et l'hypertension artérielle. Les hommes présentent une proportion d'hypertendus plus élevée (30%) que les femmes (20%).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EX 9 — tableau 3x2 -->
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="ex-badge hard">Difficile</span>
+      <span class="ex-title">Exercice 9 — Tabac, alcool et catégorie socioprofessionnelle</span>
+    </div>
+    <div class="exercise-body">
+      <div class="context">
+        Une étude examine le lien entre le statut tabagique et la catégorie socioprofessionnelle (CSP) sur 300 individus :
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th>CSP</th><th>Fumeur</th><th>Non-fumeur</th><th>Total</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-header">Cadre</td><td>20</td><td>80</td><td class="total-cell">100</td></tr>
+          <tr><td class="row-header">Employé</td><td>40</td><td>60</td><td class="total-cell">100</td></tr>
+          <tr><td class="row-header">Ouvrier</td><td>50</td><td>50</td><td class="total-cell">100</td></tr>
+          <tr><td class="row-header total-cell">Total</td><td class="total-cell">110</td><td class="total-cell">190</td><td class="total-cell">300</td></tr>
+        </tbody>
+      </table>
+      <div class="questions" style="margin-top:1rem">
+        <div class="question-item"><span class="q-marker">1</span><span>Posez H₀, H₁ et les degrés de liberté.</span></div>
+        <div class="question-item"><span class="q-marker">2</span><span>Calculez tous les effectifs théoriques et vérifiez les conditions.</span></div>
+        <div class="question-item"><span class="q-marker">3</span><span>Calculez χ² et concluez (χ²(5%, 2 d.d.l.) = 5,99).</span></div>
+      </div>
+      <button class="correction-toggle" onclick="toggleCorr(this)">
+        ✅ Afficher la correction <span class="toggle-arrow">▼</span>
+      </button>
+      <div class="correction">
+        <div class="corr-step">
+          <div class="step-label">📋 Question 1 — Hypothèses et d.d.l.</div>
+          <div class="formula-block">
+            H₀ : Le statut tabagique est indépendant de la CSP<br>
+            H₁ : Le statut tabagique est lié à la CSP<br>
+            ν = (L-1)(C-1) = (3-1)(2-1) = 2 d.d.l.<br>
+            Région critique : χ² &gt; χ²(5%, 2) = 5,99
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📊 Question 2 — Effectifs théoriques</div>
+          <div class="formula-block">
+            t_ij = (total ligne i × total col j) / n<br><br>
+            Cadres : t_11 = 100×110/300 = 36,67  | t_12 = 100×190/300 = 63,33<br>
+            Employés : t_21 = 100×110/300 = 36,67  | t_22 = 100×190/300 = 63,33<br>
+            Ouvriers : t_31 = 100×110/300 = 36,67  | t_32 = 100×190/300 = 63,33
+          </div>
+          <table class="corr-table">
+            <thead><tr><th>CSP</th><th>Fumeur (th.)</th><th>Non-fumeur (th.)</th></tr></thead>
+            <tbody>
+              <tr><td class="row-hdr">Cadre</td><td>36,67</td><td>63,33</td></tr>
+              <tr><td class="row-hdr">Employé</td><td>36,67</td><td>63,33</td></tr>
+              <tr><td class="row-hdr">Ouvrier</td><td>36,67</td><td>63,33</td></tr>
+            </tbody>
+          </table>
+          <div class="result-box">Tous les effectifs théoriques = 36,67 ou 63,33 ≥ 5 ✓</div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📐 Question 3 — Chi² et conclusion</div>
+          <div class="formula-block">
+            χ² = (20-36,67)²/36,67 + (80-63,33)²/63,33 + (40-36,67)²/36,67<br>
+                + (60-63,33)²/63,33 + (50-36,67)²/36,67 + (50-63,33)²/63,33<br><br>
+            = (-16,67)²/36,67 + (16,67)²/63,33 + (3,33)²/36,67<br>
+              + (-3,33)²/63,33 + (13,33)²/36,67 + (-13,33)²/63,33<br><br>
+            = 277,9/36,67 + 277,9/63,33 + 11,1/36,67 + 11,1/63,33 + 177,7/36,67 + 177,7/63,33<br><br>
+            = 7,578 + 4,388 + 0,303 + 0,175 + 4,847 + 2,806<br>
+            χ² = <strong>20,097</strong>
+          </div>
+          <div class="formula-block">χ² = 20,097 ≫ 5,99 → largement dans la région critique</div>
+          <div class="result-box">✅ On rejette H₀ avec un risque très faible. Il existe un lien très significatif entre le tabagisme et la catégorie socioprofessionnelle. Les ouvriers fument davantage (50%) que les employés (40%) et les cadres (20%).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPITRE 8 ===== -->
+<div id="ch8">
+  <div class="section-title">
+    <span class="num">Ch. 8</span>
+    <h2>Test de McNemar — Séries appariées</h2>
+  </div>
+
+  <div class="theory-card">
+    <h3>📐 Rappel — Test de McNemar</h3>
+    <ul>
+      <li>Pour deux variables qualitatives binaires <strong>appariées</strong> (même individus, 2 temps)</li>
+      <li>Seules les <strong>paires discordantes</strong> comptent : n₁ (A→B) et n₂ (B→A), n = n₁ + n₂</li>
+      <li>Condition : n = n₁ + n₂ ≥ 10 (sinon loi binomiale)</li>
+    </ul>
+    <span class="formula-purple">
+      H₀ : X₁ et X₂ ont la même répartition<br>
+      Si n ≥ 10 : χ² = (n₁ - n₂)² / (n₁ + n₂)   [1 d.d.l., RC : &gt; 3,84]<br>
+      Si n &lt; 10 : loi binomiale B(n, 0,5)
+    </span>
+  </div>
+
+  <!-- EX 10 -->
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="ex-badge medium">Moyen</span>
+      <span class="ex-title">Exercice 10 — Surpoids maternelle vs CE2 (exemple du cours)</span>
+    </div>
+    <div class="exercise-body">
+      <div class="context">
+        Dans le cadre d'un programme de nutrition scolaire, le statut pondéral de 695 enfants a été évalué en grande section de maternelle et en CE2. Le tableau des paires est :
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th></th><th>Surpoids en CE2</th><th>Poids normal en CE2</th><th>Total</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-header">Surpoids en maternelle</td><td>63</td><td>22</td><td class="total-cell">85</td></tr>
+          <tr><td class="row-header">Poids normal en maternelle</td><td>43</td><td>567</td><td class="total-cell">610</td></tr>
+          <tr><td class="row-header total-cell">Total</td><td class="total-cell">106</td><td class="total-cell">589</td><td class="total-cell">695</td></tr>
+        </tbody>
+      </table>
+      <div class="questions" style="margin-top:1rem">
+        <div class="question-item"><span class="q-marker">1</span><span>Identifiez les paires concordantes et discordantes.</span></div>
+        <div class="question-item"><span class="q-marker">2</span><span>Posez H₀ et H₁ (on veut savoir si le surpoids est plus fréquent en maternelle qu'en CE2).</span></div>
+        <div class="question-item"><span class="q-marker">3</span><span>Calculez la statistique de test et concluez (α = 5%).</span></div>
+      </div>
+      <button class="correction-toggle" onclick="toggleCorr(this)">
+        ✅ Afficher la correction <span class="toggle-arrow">▼</span>
+      </button>
+      <div class="correction">
+        <div class="corr-step">
+          <div class="step-label">📊 Question 1 — Paires concordantes / discordantes</div>
+          <div class="formula-block">
+            Paires concordantes : enfants dans la même catégorie aux 2 temps<br>
+            → Surpoids-Surpoids : 63 paires<br>
+            → Normal-Normal : 567 paires<br><br>
+            Paires discordantes : changement de catégorie<br>
+            → Surpoids maternelle + Normal CE2 : n₁ = 22 paires (amélioration)<br>
+            → Normal maternelle + Surpoids CE2 : n₂ = 43 paires (aggravation)<br>
+            → n = n₁ + n₂ = 22 + 43 = 65 paires discordantes
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📋 Question 2 — Hypothèses</div>
+          <p>On veut savoir si le surpoids est <em>plus fréquent en maternelle qu'en CE2</em> → test unilatéral.</p>
+          <div class="formula-block">
+            H₀ : La proportion de surpoids est identique en maternelle et en CE2<br>
+            H₁ : La proportion de surpoids en maternelle &gt; proportion en CE2<br>
+            (= plus d'enfants quittent le surpoids qu'ils n'y entrent → n₁ &gt; n₂ sous H₁)<br>
+            n = 65 ≥ 10 → on utilise la loi normale (χ²)
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📐 Question 3 — Test et conclusion</div>
+          <div class="formula-block">
+            χ² = (n₁ - n₂)² / (n₁ + n₂)<br>
+            = (22 - 43)² / (22 + 43)<br>
+            = (-21)² / 65<br>
+            = 441 / 65<br>
+            = <strong>6,785</strong>
+          </div>
+          <div class="formula-block">
+            Région critique (unilatéral → χ²(10%, 1 d.d.l.) = 2,71) : χ² &gt; 2,71<br>
+            6,785 &gt; 2,71 → dans la région critique ✓
+          </div>
+          <div class="result-box">✅ On rejette H₀. Le pourcentage d'enfants en surpoids est significativement plus élevé en grande section de maternelle qu'en CE2 (au risque 5%). Davantage d'enfants ont quitté le surpoids (n₁=22) que n'y sont entrés (n₂=43).</div>
+          <div class="warn-box">⚠️ Attention à l'interprétation : n₂=43 &gt; n₁=22 signifie que plus d'enfants sont passés de poids normal en maternelle à surpoids en CE2 (aggravation), donc le surpoids est en réalité PLUS fréquent en CE2 qu'en maternelle !</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EX 11 -->
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="ex-badge hard">Difficile</span>
+      <span class="ex-title">Exercice 11 — Effet d'un traitement (avant/après)</span>
+    </div>
+    <div class="exercise-body">
+      <div class="context">
+        Un nouveau traitement contre la dépression est évalué sur 80 patients. Avant le traitement, le statut dépressif est évalué, puis réévalué 3 mois après. Les résultats (appariés) sont :
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th></th><th>Dépressif après</th><th>Non-dépressif après</th><th>Total</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-header">Dépressif avant</td><td>12</td><td>28</td><td class="total-cell">40</td></tr>
+          <tr><td class="row-header">Non-dépressif avant</td><td>8</td><td>32</td><td class="total-cell">40</td></tr>
+          <tr><td class="row-header total-cell">Total</td><td class="total-cell">20</td><td class="total-cell">60</td><td class="total-cell">80</td></tr>
+        </tbody>
+      </table>
+      <div class="questions" style="margin-top:1rem">
+        <div class="question-item"><span class="q-marker">1</span><span>Pourquoi ne peut-on pas utiliser un test Chi² classique d'indépendance ici ?</span></div>
+        <div class="question-item"><span class="q-marker">2</span><span>Identifiez n₁ et n₂, vérifiez la condition d'application.</span></div>
+        <div class="question-item"><span class="q-marker">3</span><span>Calculez le test de McNemar et interprétez (α = 5%, bilatéral).</span></div>
+      </div>
+      <button class="correction-toggle" onclick="toggleCorr(this)">
+        ✅ Afficher la correction <span class="toggle-arrow">▼</span>
+      </button>
+      <div class="correction">
+        <div class="corr-step">
+          <div class="step-label">📋 Question 1 — Pourquoi McNemar ?</div>
+          <p>Les données sont <strong>appariées</strong> : c'est le <em>même</em> patient évalué avant et après le traitement. Les deux mesures ne sont pas indépendantes. Le test Chi² classique suppose l'indépendance des observations → il serait incorrectement appliqué ici. Le test de McNemar est conçu pour les données avant/après sur les mêmes individus.</p>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📊 Question 2 — Paires discordantes</div>
+          <div class="formula-block">
+            Paires concordantes (pas d'info) :<br>
+            → Dépressif → Dépressif : 12  (pas de changement)<br>
+            → Non-dép → Non-dép : 32  (pas de changement)<br><br>
+            Paires discordantes :<br>
+            n₁ = Dépressif avant → Non-dép après = 28  (guérison ✓)<br>
+            n₂ = Non-dép avant → Dépressif après = 8   (rechute ✗)<br>
+            n = 28 + 8 = 36 ≥ 10 ✓
+          </div>
+        </div>
+        <div class="corr-step">
+          <div class="step-label">📐 Question 3 — McNemar bilatéral</div>
+          <div class="formula-block">
+            H₀ : La répartition avant = répartition après (traitement sans effet)<br>
+            H₁ : La répartition a changé<br>
+            RC bilatérale : χ² &gt; 3,84<br><br>
+            χ² = (n₁ - n₂)² / (n₁ + n₂)<br>
+            = (28 - 8)² / (28 + 8)<br>
+            = 400 / 36<br>
+            = <strong>11,11</strong>
+          </div>
+          <div class="formula-block">11,11 &gt; 3,84 → dans la région critique ✓</div>
+          <div class="result-box">✅ On rejette H₀ au risque 5%. Il y a une différence significative entre le statut dépressif avant et après traitement. Le traitement semble efficace : 28 patients ont été guéris contre seulement 8 rechutes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer class="page-footer">
+  Abda Naima — Faculté de médecine et de pharmacie d'Oujda · 1ère Année de Médecine 2023-2024<br>
+  <span style="margin-top:0.25rem;display:block">Bonne révision ! Tu vas assurer lundi 💪</span>
+</footer>
+
+<script>
+function toggleCorr(btn) {
+  btn.classList.toggle('open');
+  const corr = btn.nextElementSibling;
+  corr.classList.toggle('show');
+}
+</script>
+
+</body>
+</html>
